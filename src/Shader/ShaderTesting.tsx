@@ -16,7 +16,7 @@ export function ShaderTesting() {
 
 function ShaderTestingCanvasElements() {
   return (
-    <mesh scale={3}>
+    <mesh scale={1.2}>
       <OrbitControls />
       <sphereGeometry />
       <shaderTestingScreenMaterial />
