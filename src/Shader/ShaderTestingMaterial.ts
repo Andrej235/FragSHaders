@@ -6,7 +6,11 @@ import sphereVertexShader from "./Shaders/Vertex/Sphere.vert";
 export class ShaderTestingScreenMaterial extends ShaderMaterial {
   constructor() {
     super({
-      uniforms: {},
+      uniforms: {
+        u_time: {
+          value: 0,
+        },
+      },
       transparent: true,
       vertexShader: sphereVertexShader,
       fragmentShader: sphereFragmentShader,
