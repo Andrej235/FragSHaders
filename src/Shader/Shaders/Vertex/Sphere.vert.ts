@@ -9,7 +9,7 @@ const sphereVertexShader: string = /* glsl */ `
     uniform float u_time;
     uniform vec2 u_resolution;
     
-    #define OCTAVES 16
+/*     #define OCTAVES 16
     float FBM(in float seed) {
         float value = 0.;
         float amplitude = .5;
@@ -22,31 +22,37 @@ const sphereVertexShader: string = /* glsl */ `
         }
     
         return value;
-    }
+    } */
 
     void main() {
         vec3 coords = position;
-        coords.y = .5 - coords.y;
-        coords.y *= 3.;
 
-        float pattern = FBM(coords.x * coords.z);
+        // float pattern = FBM(coords.x * coords.z);
+        float wave = sin(coords.x * coords.z);
         
         vPosition = position;
-        vNormal = normal;
         vUv = uv;
-        vDisplacement = pattern;
+        vDisplacement = wave;
+        vec3 newPosition = position + vec3(0.0, wave, 0.0);
 
-        // generate a displacement value using the pattern
-        float displacement = pattern ;
-
-        // move the vertex in the displacement direction
-        vec3 newPosition = position + normal * vec3(0.0, displacement, 0.0);
-
-        // calculate the final position of the vertex, taking into account the model, view and projection matrices
         vec4 modelViewPosition = modelViewMatrix * vec4(newPosition, 1.0);
         vec4 projectedPosition = projectionMatrix * modelViewPosition;
 
-        // set the gl_Position to the final position
+        // vNormal = (transpose(inverse(modelViewMatrix)) * vec4(newPosition, 1.0) * projectionMatrix).xyz;
+        // vNormal = normalMatrix * newPosition;
+
+/*         vec3 dx = vec3(coords.x, 0.0, 0.0) * cos(coords);
+        vec3 dz = vec3(0.0, 0.0, coords.z) * cos(coords);
+        vNormal = vec3(normalize(cross(dx, dz))); */
+
+        vec4 worldPosition = modelMatrix * vec4(newPosition, 1.0);
+        vec3 dx = coords * cos(coords.z); 
+        vec3 dz = coords * cos(coords.x); 
+        dx = normalize(dx);
+        dz = normalize(dz);
+
+        vNormal = vec3(normalize(cross(dx, dz)));
+
         gl_Position = projectedPosition;
     }
 `;

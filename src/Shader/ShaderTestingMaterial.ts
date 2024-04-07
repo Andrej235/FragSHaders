@@ -1,19 +1,23 @@
 import { ReactThreeFiber } from "@react-three/fiber";
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, UniformsLib, UniformsUtils } from "three";
 import sphereFragmentShader from "./Shaders/Fragment/Sphere.frag";
 import sphereVertexShader from "./Shaders/Vertex/Sphere.vert";
 
 export class ShaderTestingScreenMaterial extends ShaderMaterial {
   constructor() {
     super({
-      uniforms: {
-        u_time: {
-          value: 0,
+      uniforms: UniformsUtils.merge([
+        UniformsLib.lights,
+        {
+          u_time: {
+            value: 0,
+          },
         },
-      },
+      ]),
       transparent: true,
       vertexShader: sphereVertexShader,
       fragmentShader: sphereFragmentShader,
+      lights: true,
     });
   }
 }
