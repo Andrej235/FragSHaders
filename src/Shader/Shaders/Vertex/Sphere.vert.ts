@@ -24,19 +24,33 @@ const sphereVertexShader: string = /* glsl */ `
         return value;
     } */
 
+    float getwaves(vec2 x){
+        return sin(x.x + x.y);
+    }
+
+    vec3 getnormal(vec2 pos, float e, float depth) {
+        vec2 ex = vec2(e, 0);
+        float H = getwaves(pos.xy) * depth;
+        vec3 a = vec3(pos.x, H, pos.y);
+        return normalize(
+          cross(
+            a - vec3(pos.x - e, getwaves(pos.xy - ex.xy) * depth, pos.y), 
+            a - vec3(pos.x, getwaves(pos.xy + ex.yx) * depth, pos.y + e)
+          )
+        );
+      }
+
     void main() {
         vec3 coords = position;
-
-        // float pattern = FBM(coords.x * coords.z);
-        float wave = sin(coords.x * coords.z);
         
         vPosition = position;
         vUv = uv;
-        vDisplacement = wave;
-        vec3 newPosition = position + vec3(0.0, wave, 0.0);
-
+        // vDisplacement = wave;
+        
+        vec3 newPosition = vec3(position.x, sin((position.x + position.z)  + u_time), position.z);
         vec4 modelViewPosition = modelViewMatrix * vec4(newPosition, 1.0);
         vec4 projectedPosition = projectionMatrix * modelViewPosition;
+        gl_Position = projectedPosition;
 
         // vNormal = (transpose(inverse(modelViewMatrix)) * vec4(newPosition, 1.0) * projectionMatrix).xyz;
         // vNormal = normalMatrix * newPosition;
@@ -45,15 +59,19 @@ const sphereVertexShader: string = /* glsl */ `
         vec3 dz = vec3(0.0, 0.0, coords.z) * cos(coords);
         vNormal = vec3(normalize(cross(dx, dz))); */
 
-        vec4 worldPosition = modelMatrix * vec4(newPosition, 1.0);
+/*         vec4 worldPosition = modelMatrix * vec4(newPosition, 1.0);
         vec3 dx = coords * cos(coords.z); 
         vec3 dz = coords * cos(coords.x); 
         dx = normalize(dx);
         dz = normalize(dz);
 
-        vNormal = vec3(normalize(cross(dx, dz)));
+        vNormal = vec3(normalize(cross(dx, dz))); */
 
-        gl_Position = projectedPosition;
+        // vNormal = getnormal(position.xz, 1.1, 1.0);
+
+        vec3 dx = vec3(1.0, cos((position.x + position.z) + u_time), 0.0);
+        vec3 dz = vec3(0.0, cos((position.x + position.z) + u_time), 1.0);
+        vNormal = normalize(cross(dx, dz));
     }
 `;
 

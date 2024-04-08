@@ -14,8 +14,11 @@ const sphereFragmentShader: string = /* glsl */ `
     varying float vDisplacement;
 
     void main() {
-        float diffuse = dot(directionalLights[0].direction, vNormal);
-        gl_FragColor = vec4(vNormal, 1.0);
+        // vec3 lightDirection = directionalLights[0].direction;
+        vec3 lightDirection = vec3(0.5, 0.123, 0.43);
+
+        float diffuse = dot(lightDirection, vNormal);
+        gl_FragColor = vec4(vec3(diffuse), 1.0);
     }
 `;
 

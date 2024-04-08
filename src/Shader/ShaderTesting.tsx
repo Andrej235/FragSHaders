@@ -26,7 +26,7 @@ function ShaderTestingCanvasElements() {
   const mesh = useRef(null);
   const material = useRef<ShaderTestingScreenMaterial>(null);
 
-  // console.log(material.current?.uniforms);
+  console.log(material.current?.uniforms);
 
   return (
     <>
