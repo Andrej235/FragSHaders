@@ -1,5 +1,5 @@
 import { ReactThreeFiber } from "@react-three/fiber";
-import { ShaderMaterial, UniformsLib, UniformsUtils } from "three";
+import { ShaderMaterial, UniformsLib, UniformsUtils, Vector3 } from "three";
 import sphereFragmentShader from "./Shaders/Fragment/Sphere.frag";
 import sphereVertexShader from "./Shaders/Vertex/Sphere.vert";
 
@@ -9,8 +9,11 @@ export class ShaderTestingScreenMaterial extends ShaderMaterial {
       uniforms: UniformsUtils.merge([
         UniformsLib.lights,
         {
-          u_time: {
+          uTime: {
             value: 0,
+          },
+          uLightDirection: {
+            value: new Vector3(0),
           },
         },
       ]),

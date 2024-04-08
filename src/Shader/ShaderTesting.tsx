@@ -1,7 +1,7 @@
 import { Canvas, extend, useFrame, useLoader } from "@react-three/fiber";
 import { ShaderTestingScreenMaterial } from "./ShaderTestingMaterial";
 import { OrbitControls } from "@react-three/drei";
-import { DoubleSide, Euler } from "three";
+import { FrontSide, Vector3 } from "three";
 import { useRef, useState } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
@@ -26,7 +26,10 @@ function ShaderTestingCanvasElements() {
   const mesh = useRef(null);
   const material = useRef<ShaderTestingScreenMaterial>(null);
 
-  console.log(material.current?.uniforms);
+  // console.log(material.current?.uniforms);
+
+  //@ts-ignore
+  console.log(material.current?.uniforms.directionalLights.value.map(x => x.direction));
 
   return (
     <>
@@ -40,13 +43,13 @@ function ShaderTestingCanvasElements() {
         ref={mesh}
         scale={10.2}
         position={[10, 0, 3]}
-        rotation={new Euler(Math.PI)}
         geometry={gltf.scene.children[0].geometry}
       >
         <OrbitControls />
         <shaderTestingScreenMaterial
-          uniforms-u_time-value={time}
-          side={DoubleSide}
+          uniforms-uTime-value={time}
+          uniforms-uLightDirection-value={new Vector3(0.58, -0.43, .68)}
+          side={FrontSide}
           ref={material}
         />
       </mesh>
