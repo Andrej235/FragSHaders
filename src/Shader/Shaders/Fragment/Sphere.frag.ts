@@ -15,10 +15,13 @@ const sphereFragmentShader: string = /* glsl */ `
 
     void main() {
         // vec3 lightDirection = directionalLights[0].direction;
-        vec3 lightDirection = vec3(0.5, 0.123, 0.43);
+        vec3 lightDirection = vec3(0.91, 0.0, .4);
 
+        //Normalize this value to get all shaded areas to be black  
         float diffuse = dot(lightDirection, vNormal);
-        gl_FragColor = vec4(vec3(diffuse), 1.0);
+        vec3 color = vec3(0.3, 0.3, 1.0) * diffuse;
+        color += (1.0 - diffuse) * vec3(0.1, 0.1, 0.4);
+        gl_FragColor = vec4(color, 1.0);
     }
 `;
 
