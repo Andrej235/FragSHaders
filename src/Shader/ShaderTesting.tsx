@@ -20,16 +20,14 @@ export function ShaderTesting() {
 function ShaderTestingCanvasElements() {
   const [time, setTime] = useState(0);
   useFrame((x) => setTime(x.clock.elapsedTime));
-  const gltf = useLoader(GLTFLoader, "/SubdividedPlane.glb");
+  const gltf = useLoader(GLTFLoader, "/Plane66KVerts.glb");
 
   const light = useRef<any>(null);
   const mesh = useRef(null);
   const material = useRef<ShaderTestingScreenMaterial>(null);
 
-  // console.log(material.current?.uniforms);
-
   //@ts-ignore
-  console.log(material.current?.uniforms.directionalLights.value.map(x => x.direction));
+  // console.log(material.current?.uniforms.directionalLights.value.map(x => x.direction));
 
   return (
     <>

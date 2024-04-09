@@ -1,4 +1,5 @@
 const sphereVertexShader: string = /* glsl */ `
+    #define e 2.71828
     uniform float uTime;
 
     varying vec3 vNormal;
@@ -8,23 +9,17 @@ const sphereVertexShader: string = /* glsl */ `
 
     uniform vec3 uLightDirection;
 
+    vec2 random(vec2 seed) {
+        return fract(sin(vec2(dot(seed, vec2(127.1, 311.7)), dot(seed, vec2(269.5, 183.3)))) * 43758.5453);
+    }
+
     void main() {
         vec3 coords = position;
         vec3 newPosition = vec3(position.x, 0.0, position.z);
 
-        float amplitude = 0.07;
-        float frequency = 10.;
-        const float phase = 5.;
-        // newPosition.y = amplitude * sin(position.x * frequency + uTime * phase);
-        // newPosition.y += amplitude * sin(position.z * frequency + uTime * phase);
-        
-/*         vec3 dx = vec3(1.0, 0.0, 0.0);
-        dx.y = amplitude * cos(position.x * frequency + uTime * phase);
-        
-        vec3 dz = vec3(0.0, 0.0, 1.0);
-        dz.y = amplitude * cos(position.z * frequency + uTime * phase);
-
-        vNormal = normalize(cross(dx, dz)); */
+        float amplitude = .02;
+        float frequency = 1.;
+        const float phase = 3.;
 
         vec3 dx = vec3(1.0, 0.0, 0.0);
         vec3 dz = vec3(0.0, 0.0, 1.0);
@@ -33,14 +28,17 @@ const sphereVertexShader: string = /* glsl */ `
         float z = position.z;
 
         for(int i = 0; i < 8; i++) {
-            newPosition.y += amplitude * sin(x * frequency + uTime * phase);
-            newPosition.y += amplitude * sin(z * frequency + uTime * phase);
-            dx.y += amplitude * cos(x * frequency + uTime * phase);
-            dz.y += amplitude * cos(z * frequency + uTime * phase);
-            amplitude *= .5923;
-            frequency *= 1.74523;
+            vec2 direction = random(position.xz);
+            newPosition.y += amplitude * sin((direction.x * x + direction.y * z) * frequency + uTime * phase);
+            // newPosition.y += amplitude * sin(z * frequency + uTime * phase);
+            dx.y += amplitude * cos((direction.x * x + direction.y * z) * frequency + uTime * phase) * frequency * direction.x;
+            dz.y += amplitude * cos((direction.x * x + direction.y * z) * frequency + uTime * phase) * frequency * direction.y;
+            // dz.y += amplitude * cos(z * frequency + uTime * phase);
+            amplitude *= .8;
+            frequency *= 1.2;
         }
         vNormal = normalize(cross(dx, dz));
+        newPosition.y /= 2.0;
         
         vec4 modelViewPosition = modelViewMatrix * vec4(newPosition, 1.0);
         vec4 projectedPosition = projectionMatrix * modelViewPosition;
