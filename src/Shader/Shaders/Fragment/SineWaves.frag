@@ -26,4 +26,7 @@ void main() {
     color *= step(y - 0.0075, pos.y) * (1.0 - step(y + 0.0075, pos.y));
 
     gl_FragColor = vec4(color, 1.0);
+
+    exp(vec2(0.));
+    cross(vec3(0.0), vec3(0.0));
 }
