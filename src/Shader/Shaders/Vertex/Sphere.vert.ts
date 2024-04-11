@@ -71,8 +71,9 @@ const sphereVertexShader: string = /* glsl */ `
 
         for(int i=0; i < 32; i++) {
           vec2 direction = vec2(sin(iterationDirectionMultiplier), cos(iterationDirectionMultiplier));
-          float posDirDot = dot(position.xz, direction); 
+          // coords += dx + dz; //Maybe??
 
+          float posDirDot = dot(coords.xz, direction); 
           newPosition.y += pow(e, sin(posDirDot * frequency + uTime * timeMultiplier) - 1.0) * weight;
 
           dx.y += frequency * direction.x * weight * pow(e, sin(posDirDot * frequency + uTime * timeMultiplier) - 1.0) * cos(frequency * posDirDot + uTime * timeMultiplier);
@@ -103,7 +104,8 @@ const sphereVertexShader: string = /* glsl */ `
         gl_Position = projectedPosition;
 
         vUv = uv;
-        vCameraPosition = (modelViewMatrix * vec4(newPosition, 1.0)).xyz;
+        vCameraPosition = normalize(vec4(cameraPosition, 0.0) * viewMatrix).xyz;
+        // vCameraPosition = (modelViewMatrix * vec4(newPosition, 1.0)).xyz;
         vLightDirectionView = (viewMatrix * vec4(uLightDirection, 0.)).xyz;
     }
 `;

@@ -15,6 +15,21 @@ export class ShaderTestingScreenMaterial extends ShaderMaterial {
           uLightDirection: {
             value: new Vector3(0),
           },
+          uFresnelNormalStrength: {
+            value: 2,
+          },
+          uFresnelStrength: {
+            value: 1,
+          },
+          uFresnelShininess: {
+            value: 1,
+          },
+          uFresnelBias: {
+            value: 1,
+          },
+          uFresnelColor: {
+            value: new Vector3(0.5, 0.5, 0.5),
+          },
         },
       ]),
       transparent: true,
