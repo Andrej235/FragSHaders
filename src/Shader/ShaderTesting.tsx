@@ -27,7 +27,7 @@ function ShaderTestingCanvasElements() {
   const material = useRef<ShaderTestingScreenMaterial>(null);
 
   //@ts-ignore
-  // console.log(material.current?.uniforms.directionalLights.value.map(x => x.direction));
+  //console.log(material.current?.uniforms.directionalLights.value.map(x => x.direction));
 
   return (
     <>
@@ -39,18 +39,23 @@ function ShaderTestingCanvasElements() {
 
       <mesh
         ref={mesh}
-        scale={10.2}
-        position={[10, 0, 3]}
+        scale={100}
+        position={[10, -10, 3]}
         geometry={gltf.scene.children[0].geometry}
       >
         <OrbitControls />
         <shaderTestingScreenMaterial
           uniforms-uTime-value={time}
-          uniforms-uLightDirection-value={new Vector3(0.58, -0.43, .68)}
+          uniforms-uLightDirection-value={new Vector3(0., -0.5, 0.5)}
           side={FrontSide}
           ref={material}
         />
       </mesh>
+
+{/*       <mesh position={[0, 0.5, -0.5]}>
+        <sphereGeometry />
+        <meshStandardMaterial />
+      </mesh> */}
     </>
   );
 }
